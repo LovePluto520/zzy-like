@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * @author pine
+ * @author
  */
 @RestController
 @RequestMapping("blog")
