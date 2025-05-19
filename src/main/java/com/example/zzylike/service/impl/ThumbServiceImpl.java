@@ -26,7 +26,7 @@ import java.time.temporal.ChronoUnit;
 /**
  * @author
  */
-@Service
+@Service("thumbServiceDB")
 @Slf4j
 @RequiredArgsConstructor
 public class ThumbServiceImpl extends ServiceImpl<ThumbMapper, Thumb>
