@@ -1,7 +1,7 @@
 server:
   servlet:
     context-path: /api
-  port: 8080
+  port: 8123
 
 spring:
   application:
@@ -19,6 +19,11 @@ spring:
       password: 123456
       timeout: 5000
       port: 6379
+  pulsar:
+    client:
+      service-url: pulsar://192.168.183.129:6650
+    admin:
+      service-url: pulsar://192.168.183.129:8080
 
 # 配置springdoc-openapi的相关属性
 springdoc:
