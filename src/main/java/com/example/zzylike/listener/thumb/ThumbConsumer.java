@@ -31,7 +31,7 @@ public class ThumbConsumer {
     public void consumerDlq(Message<ThumbEvent> message) {
         MessageId messageId = message.getMessageId();
         log.info("dlq message = {}", messageId);
-        log.info("消息 {} 已入库", messageId);
+        log.info("消息 {} 已入库死信队列", messageId);
         log.info("已通知相关人员 {} 处理消息 {}", "坤哥", messageId);
     }
 
@@ -42,7 +42,7 @@ public class ThumbConsumer {
             schemaType = SchemaType.JSON,
             batch = true,
             subscriptionType = SubscriptionType.Shared,
-            // consumerCustomizer = "thumbConsumerConfig",
+            consumerCustomizer = "thumbConsumerConfig",
             // 引用 NACK 重试策略
             negativeAckRedeliveryBackoff = "negativeAckRedeliveryBackoff",
             // 引用 ACK 超时重试策略
@@ -52,13 +52,9 @@ public class ThumbConsumer {
     )
     @Transactional(rollbackFor = Exception.class)
     public void processBatch(List<Message<ThumbEvent>> messages) {
+
         log.info("ThumbConsumer processBatch: {}", messages.size());
-        // for (Message<ThumbEvent> message : messages) {
-        //     log.info("message.getMessageId() = {}", message.getMessageId());
-        // }
-        // if (true) {
-        //     throw new RuntimeException("ThumbConsumer processBatch failed");
-        // }
+
         Map<Long, Long> countMap = new ConcurrentHashMap<>();
         List<Thumb> thumbs = new ArrayList<>();
 
@@ -82,9 +78,7 @@ public class ThumbConsumer {
                                 list -> {
                                     // 按时间升序排序，取最后一个作为最新事件
                                     list.sort(Comparator.comparing(ThumbEvent::getEventTime));
-                                    if (list.size() % 2 == 0) {
-                                        return null;
-                                    }
+
                                     return list.get(list.size() - 1);
                                 }
                         )
@@ -115,6 +109,7 @@ public class ThumbConsumer {
         }
         batchUpdateBlogs(countMap);
         batchInsertThumbs(thumbs);
+
     }
 
     public void batchUpdateBlogs(Map<Long, Long> countMap) {

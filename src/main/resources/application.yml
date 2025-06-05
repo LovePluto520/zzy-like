@@ -1,7 +1,7 @@
 server:
   servlet:
     context-path: /api
-  port: 8123
+  port: 8124
 
 spring:
   application:
@@ -11,6 +11,9 @@ spring:
     url: jdbc:mysql://localhost:3306/zzy_like?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     username: root
     password: 123456
+#    url: jdbc:mysql://192.168.253.128:4000/zzy_like
+#    username: root
+#    password:
   data:
     # Redis 配置
     redis:
@@ -21,9 +24,10 @@ spring:
       port: 6379
   pulsar:
     client:
-      service-url: pulsar://192.168.183.129:6650
+      service-url: pulsar://192.168.253.128:6650
     admin:
-      service-url: pulsar://192.168.183.129:8080
+      service-url: pulsar://192.168.253.128:8080
+
 
 # 配置springdoc-openapi的相关属性
 springdoc:
